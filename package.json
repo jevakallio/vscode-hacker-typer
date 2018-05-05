@@ -1,0 +1,39 @@
+{
+  "name": "vscode-hacker-typer",
+  "displayName": "vscode-hacker-typer",
+  "description": "Hacker Typer",
+  "version": "0.0.1",
+  "publisher": "jevakallio",
+  "engines": {
+    "vscode": "^1.23.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:extension.recordMacro"],
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.recordMacro",
+        "title": "Record Hacker Typer Macro"
+      },
+      {
+        "command": "extension.playMacro",
+        "title": "Play Hacker Typer Macro"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.6",
+    "tslint": "^5.8.0",
+    "@types/node": "^7.0.43",
+    "@types/mocha": "^2.2.42"
+  }
+}
