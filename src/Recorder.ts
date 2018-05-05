@@ -7,11 +7,13 @@ export default class Recorder {
   private _disposable: vscode.Disposable;
   private _textEditor: vscode.TextEditor | undefined;
   private _buffers = 0;
+  private _currentChanges: vscode.TextDocumentContentChangeEvent[] = [];
 
   public static register(context: vscode.ExtensionContext) {
     return () => {
       // reset global buffer
       buffers.clear();
+
       vscode.window.showInformationMessage("Now recording!");
       const recorder = new Recorder();
       context.subscriptions.push(recorder);
@@ -21,8 +23,15 @@ export default class Recorder {
   constructor() {
     // subscribe to selection change events
     let subscriptions: vscode.Disposable[] = [];
+
+    vscode.workspace.onDidChangeTextDocument(
+      this.onDidChangeTextDocument,
+      this,
+      subscriptions
+    );
+
     vscode.window.onDidChangeTextEditorSelection(
-      this.onEvent,
+      this.onDidChangeTextEditorSelection,
       this,
       subscriptions
     );
@@ -32,17 +41,30 @@ export default class Recorder {
     this._disposable = vscode.Disposable.from(...subscriptions);
   }
 
-  private onEvent(e: vscode.TextEditorSelectionChangeEvent) {
+  private onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
+    // @TODO: Gets called while playing -- need to stop recording once over
+
+    // store changes, selection change will commit
+    this._currentChanges = e.contentChanges;
+  }
+
+  private onDidChangeTextEditorSelection(
+    e: vscode.TextEditorSelectionChangeEvent
+  ) {
+    // @TODO: Gets called while playing -- need to stop recording once over
+
     // Only allow recording to one active editor at a time
     // Breaks when you leave but that's fine for now.
     if (e.textEditor !== this._textEditor) {
       return;
     }
 
-    const text = e.textEditor.document.getText();
-    const selections = e.selections;
+    const changes = this._currentChanges;
+    const selections = e.selections || [];
+    this._currentChanges = [];
+
     buffers.insert({
-      text,
+      changes,
       selections,
       position: this._buffers++
     });

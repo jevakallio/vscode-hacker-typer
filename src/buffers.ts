@@ -3,10 +3,14 @@ import * as vscode from "vscode";
 let buffers: Buffer[] = [];
 
 export type Buffer = {
-  text: string;
+  changes: vscode.TextDocumentContentChangeEvent[];
   selections: vscode.Selection[];
   position: number;
 };
+
+export function all() {
+  return buffers;
+}
 
 export function get(position: number) {
   if (position === undefined || position < 0 || position >= buffers.length) {

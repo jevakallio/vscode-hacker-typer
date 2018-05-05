@@ -8,7 +8,7 @@
     "vscode": "^1.23.0"
   },
   "categories": ["Other"],
-  "activationEvents": ["onCommand:extension.recordMacro"],
+  "activationEvents": ["*"],
   "main": "./out/extension",
   "contributes": {
     "commands": [

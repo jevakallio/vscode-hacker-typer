@@ -2,7 +2,7 @@
 
 import * as vscode from "vscode";
 import Recorder from "./Recorder";
-import Player from "./Player";
+import * as replay from "./replay";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -21,12 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
     Recorder.register(context)
   );
 
-  let play = vscode.commands.registerCommand(
-    "extension.playMacro",
-    Player.register(context)
-  );
+  let play = vscode.commands.registerCommand("extension.playMacro", () => {
+    replay.enable();
+  });
 
-  context.subscriptions.push(record, play);
+  // @TODO dispose
+  let type = vscode.commands.registerCommand("type", replay.onType);
+
+  context.subscriptions.push(record, play, type);
 }
 
 // this method is called when your extension is deactivated
