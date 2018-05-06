@@ -15,10 +15,6 @@ export function all() {
 }
 
 export function get(position: number) {
-  if (position === undefined || position < 0 || position >= buffers.length) {
-    throw new Error(`No buffer found at ${position}`);
-  }
-
   return buffers[position];
 }
 

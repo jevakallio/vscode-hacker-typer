@@ -31,9 +31,12 @@ export function disable() {
 
 export function onType({ text }: { text: string }) {
   if (isEnabled) {
-    replayQueue.add(() => new Promise(next => {
-      advanceBuffer(next);
-    }));
+    replayQueue.add(
+      () =>
+        new Promise(next => {
+          advanceBuffer(next);
+        })
+    );
   } else {
     vscode.commands.executeCommand("default:type", { text });
   }
@@ -80,9 +83,9 @@ function advanceBuffer(next: () => void) {
 
 function applyContentChanges(
   changes: vscode.TextDocumentContentChangeEvent[],
-  edit: vscode.TextEditorEdit 
+  edit: vscode.TextEditorEdit
 ) {
-  changes.forEach(change => applyContentChange(change, edit)
+  changes.forEach(change => applyContentChange(change, edit));
 }
 
 function applyContentChange(
