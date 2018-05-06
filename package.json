@@ -7,8 +7,12 @@
   "engines": {
     "vscode": "^1.23.0"
   },
-  "categories": ["Other"],
-  "activationEvents": ["*"],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
   "main": "./out/extension",
   "contributes": {
     "commands": [
@@ -35,5 +39,9 @@
     "tslint": "^5.8.0",
     "@types/node": "^7.0.43",
     "@types/mocha": "^2.2.42"
+  },
+  "dependencies": {
+    "@types/promise-queue": "^2.2.0",
+    "promise-queue": "^2.2.5"
   }
 }

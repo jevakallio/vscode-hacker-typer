@@ -1,5 +1,10 @@
 import * as vscode from "vscode";
 import * as buffers from "./buffers";
+import * as Queue from "promise-queue";
+
+const replayConcurrency = 1;
+const replayQueueMaxSize = Number.MAX_SAFE_INTEGER;
+const replayQueue = new Queue(replayConcurrency, replayQueueMaxSize);
 
 let isEnabled = false;
 let currentBuffer: buffers.Buffer | undefined;
@@ -26,13 +31,15 @@ export function disable() {
 
 export function onType({ text }: { text: string }) {
   if (isEnabled) {
-    advanceBuffer();
+    replayQueue.add(() => new Promise(next => {
+      advanceBuffer(next);
+    }));
   } else {
     vscode.commands.executeCommand("default:type", { text });
   }
 }
 
-function advanceBuffer() {
+function advanceBuffer(next: () => void) {
   const editor = vscode.window.activeTextEditor;
   const buffer = currentBuffer;
 
@@ -47,7 +54,7 @@ function advanceBuffer() {
   }
 
   const { changes, selections } = buffer;
-  const advance = () => {
+  const updateSelectionAndAdvanceToNextBuffer = () => {
     if (selections.length) {
       editor.selections = selections;
     }
@@ -58,19 +65,27 @@ function advanceBuffer() {
     if (!currentBuffer) {
       disable();
     }
+
+    next();
   };
 
-  if (changes.length) {
-    editor.edit(edit => {
-      changes.forEach(change => applyContentChanges(change, edit));
-      advance();
-    });
+  if (changes.length > 0) {
+    editor
+      .edit(edit => applyContentChanges(changes, edit))
+      .then(updateSelectionAndAdvanceToNextBuffer);
   } else {
-    advance();
+    updateSelectionAndAdvanceToNextBuffer();
   }
 }
 
 function applyContentChanges(
+  changes: vscode.TextDocumentContentChangeEvent[],
+  edit: vscode.TextEditorEdit 
+) {
+  changes.forEach(change => applyContentChange(change, edit)
+}
+
+function applyContentChange(
   change: vscode.TextDocumentContentChangeEvent,
   edit: vscode.TextEditorEdit
 ) {
