@@ -17,18 +17,34 @@ export function activate(context: vscode.ExtensionContext) {
   // Now provide the implementation of the command with  registerCommand
   // The commandId parameter must match the command field in package.json
   let record = vscode.commands.registerCommand(
-    "extension.recordMacro",
+    "hackertyper.recordMacro",
     Recorder.register(context)
   );
 
-  let play = vscode.commands.registerCommand("extension.playMacro", () => {
-    replay.enable();
+  let play = vscode.commands.registerCommand("hackertyper.playMacro", () => {
+    replay.start(context);
+  });
+
+  let test = vscode.commands.registerCommand("hackertyper.testStuff", () => {
+    vscode.window
+      .showInputBox({
+        prompt: "Give this thing a name",
+        placeHolder: "my-awesome-macro"
+      })
+      .then(value => {
+        vscode.window.showInformationMessage(`${value}`);
+        vscode.window
+          .showQuickPick(["One", "Two", "Three"], {})
+          .then(picked => {
+            vscode.window.showInformationMessage(`${picked}`);
+          });
+      });
   });
 
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);
 
-  context.subscriptions.push(record, play, type);
+  context.subscriptions.push(record, play, type, test);
 }
 
 // this method is called when your extension is deactivated

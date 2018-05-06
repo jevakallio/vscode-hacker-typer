@@ -7,22 +7,26 @@
   "engines": {
     "vscode": "^1.23.0"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "*"
-  ],
+  "categories": ["Other"],
+  "activationEvents": ["*"],
   "main": "./out/extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.recordMacro",
+        "command": "hackertyper.recordMacro",
         "title": "Record Hacker Typer Macro"
       },
       {
-        "command": "extension.playMacro",
+        "command": "hackertyper.playMacro",
         "title": "Play Hacker Typer Macro"
+      },
+      {
+        "command": "hackertyper.saveMacro",
+        "title": "Save Current Hacker Typer Macro"
+      },
+      {
+        "command": "hackertyper.testStuff",
+        "title": "Test hacker typer stuff"
       }
     ]
   },
@@ -42,6 +46,7 @@
   },
   "dependencies": {
     "@types/promise-queue": "^2.2.0",
-    "promise-queue": "^2.2.5"
+    "promise-queue": "^2.2.5",
+    "vscode-cache": "^0.3.0"
   }
 }

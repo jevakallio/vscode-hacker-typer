@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as buffers from "./buffers";
+import Storage from "./storage";
 import * as Queue from "promise-queue";
-
 const replayConcurrency = 1;
 const replayQueueMaxSize = Number.MAX_SAFE_INTEGER;
 const replayQueue = new Queue(replayConcurrency, replayQueueMaxSize);
@@ -9,19 +9,31 @@ const replayQueue = new Queue(replayConcurrency, replayQueueMaxSize);
 let isEnabled = false;
 let currentBuffer: buffers.Buffer | undefined;
 
-export function enable() {
-  currentBuffer = buffers.get(0);
-  if (!currentBuffer) {
-    vscode.window.showErrorMessage("No active recording");
-    return;
-  }
+export function start(context: vscode.ExtensionContext) {
+  const storage = Storage.getInstance(context);
+  const items = storage.list();
+  vscode.window.showQuickPick(items.map(item => item.name)).then(picked => {
+    if (!picked) {
+      return;
+    }
 
-  console.log("All", JSON.stringify(buffers.all()));
+    vscode.window.showInformationMessage(`${picked}`);
+    const macro = storage.getByName(picked);
+    buffers.inject(macro.buffers);
 
-  isEnabled = true;
-  vscode.window.showInformationMessage(
-    `Now playing ${buffers.count()} frames!`
-  );
+    currentBuffer = buffers.get(0);
+    if (!currentBuffer) {
+      vscode.window.showErrorMessage("No active recording");
+      return;
+    }
+
+    console.log("All", JSON.stringify(buffers.all()));
+
+    isEnabled = true;
+    vscode.window.showInformationMessage(
+      `Now playing ${buffers.count()} frames from ${macro.name}!`
+    );
+  });
 }
 
 export function disable() {

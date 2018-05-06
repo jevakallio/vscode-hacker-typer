@@ -22,7 +22,7 @@ interface SerializedSelection {
   anchor: SerializedPosition;
 }
 
-interface SerializedBuffer {
+export interface SerializedBuffer {
   changes: SerializedChangeEvent[];
   selections: SerializedSelection[];
   position: number;

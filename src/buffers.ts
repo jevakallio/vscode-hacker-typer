@@ -18,6 +18,11 @@ export function get(position: number) {
   return buffers[position];
 }
 
+// @TODO LOL delete this shit
+export function inject(_buffers: Buffer[]) {
+  buffers = _buffers;
+}
+
 export function insert(buffer: Buffer) {
   buffers.push(buffer);
 }

@@ -2,12 +2,14 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import * as buffers from "./buffers";
+import Storage from "./storage";
 
 export default class Recorder {
   private _disposable: vscode.Disposable;
   private _textEditor: vscode.TextEditor | undefined;
   private _buffers = 0;
   private _currentChanges: vscode.TextDocumentContentChangeEvent[] = [];
+  private _storage: Storage;
 
   public static register(context: vscode.ExtensionContext) {
     return () => {
@@ -15,15 +17,15 @@ export default class Recorder {
       buffers.clear();
 
       vscode.window.showInformationMessage("Now recording!");
-      const recorder = new Recorder();
+      const recorder = new Recorder(Storage.getInstance(context));
       context.subscriptions.push(recorder);
     };
   }
 
-  constructor() {
-    // subscribe to selection change events
-    let subscriptions: vscode.Disposable[] = [];
+  constructor(storage: Storage) {
+    this._storage = storage;
 
+    let subscriptions: vscode.Disposable[] = [];
     vscode.workspace.onDidChangeTextDocument(
       this.onDidChangeTextDocument,
       this,
@@ -36,9 +38,38 @@ export default class Recorder {
       subscriptions
     );
 
+    const save = vscode.commands.registerCommand(
+      "hackertyper.saveMacro",
+      () => {
+        vscode.window
+          .showInputBox({
+            prompt: "Give this thing a name",
+            placeHolder: "cool-macro"
+          })
+          .then(name => {
+            if (name) {
+              return this._storage
+                .save({
+                  name,
+                  description: "",
+                  buffers: buffers.all()
+                })
+                .then(macro => {
+                  vscode.window.showInformationMessage(
+                    `Saved ${macro.buffers.length} frames under "${
+                      macro.name
+                    }".`
+                  );
+                  save.dispose();
+                });
+            }
+          });
+      }
+    );
+
     // Why?
     this._textEditor = vscode.window.activeTextEditor;
-    this._disposable = vscode.Disposable.from(...subscriptions);
+    this._disposable = vscode.Disposable.from(...subscriptions, save);
   }
 
   private onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {
