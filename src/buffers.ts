@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
+import dummy from "./test/data";
+import { rehydrateBuffer } from "./rehydrate";
 
-let buffers: Buffer[] = [];
+let buffers: Buffer[] = dummy.map(rehydrateBuffer);
 
 export type Buffer = {
   changes: vscode.TextDocumentContentChangeEvent[];

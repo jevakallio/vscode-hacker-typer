@@ -11,7 +11,7 @@ export function enable() {
     return;
   }
 
-  console.log("All", buffers.all());
+  console.log("All", JSON.stringify(buffers.all()));
 
   isEnabled = true;
   vscode.window.showInformationMessage(
@@ -75,13 +75,10 @@ function applyContentChanges(
   edit: vscode.TextEditorEdit
 ) {
   if (change.text === "") {
-    console.log("delete", change);
     edit.delete(change.range);
   } else if (change.rangeLength === 0) {
-    console.log("insert", change);
     edit.insert(change.range.start, change.text);
   } else {
-    console.log("replace", change);
     edit.replace(change.range, change.text);
   }
 }
