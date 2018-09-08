@@ -27,7 +27,7 @@ export function start(context: vscode.ExtensionContext) {
       return;
     }
 
-    console.log("All", JSON.stringify(buffers.all()));
+    // console.log("All", JSON.stringify(buffers.all()));
 
     isEnabled = true;
     vscode.window.showInformationMessage(
@@ -72,8 +72,14 @@ function advanceBuffer(next: () => void) {
   const updateSelectionAndAdvanceToNextBuffer = () => {
     if (selections.length) {
       editor.selections = selections;
-    }
 
+      // move scroll focus if needed
+      const { start, end } = editor.selections[0];
+      editor.revealRange(
+        new vscode.Range(start, end),
+        vscode.TextEditorRevealType.InCenterIfOutsideViewport
+      );
+    }
     currentBuffer = buffers.get(buffer.position + 1);
 
     // Ran out of buffers? Disable type capture.
