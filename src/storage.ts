@@ -17,8 +17,8 @@ type Macro = Metadata & {
 
 /*
   Stores macros in a persistent caches, where
-  - Metadata is stores in an array under key ${hackerTyperMetadataListing}
-  - Individual buffers are stored under keys ${Metadata.name}
+  - Metadata is stored in a storage namespace ${LISTINGS}
+  - Individual buffers are stored in in namespace ${MACROS}
 */
 export default class Storage {
   // Singleton because we need ExtensionContext to initialize
