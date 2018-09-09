@@ -30,7 +30,12 @@ export function activate(context: vscode.ExtensionContext) {
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);
 
-  context.subscriptions.push(record, play, type, test);
+  let backspace = vscode.commands.registerCommand(
+    "hackertyper.backspace",
+    replay.onBackspace
+  );
+
+  context.subscriptions.push(record, play, type, backspace, test);
 }
 
 // this method is called when your extension is deactivated

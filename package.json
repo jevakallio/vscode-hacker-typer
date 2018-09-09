@@ -15,6 +15,12 @@
   ],
   "main": "./out/extension",
   "contributes": {
+    "keybindings": [
+      {
+        "command": "hackertyper.backspace",
+        "key": "backspace"
+      }
+    ],
     "commands": [
       {
         "command": "hackertyper.recordMacro",
@@ -39,6 +45,10 @@
       {
         "command": "hackertyper.testStuff",
         "title": "Test hacker typer stuff"
+      },
+      {
+        "command": "hackertyper.backspace",
+        "title": "Erase previous frame"
       }
     ]
   },

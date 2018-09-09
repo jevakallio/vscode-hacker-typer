@@ -60,6 +60,16 @@ export function onType({ text }: { text: string }) {
   }
 }
 
+export function onBackspace() {
+  // move buffer one step backwards
+  if (isEnabled) {
+    currentBuffer = buffers.get(Math.max(0, currentBuffer.position - 1));
+  }
+
+  // actually execute backspace action
+  vscode.commands.executeCommand("deleteLeft");
+}
+
 function advanceBuffer(done: () => void, userInput: string) {
   const editor = vscode.window.activeTextEditor;
   const buffer = currentBuffer;
