@@ -18,6 +18,7 @@
     "keybindings": [
       {
         "command": "hackertyper.backspace",
+        "when": "editorTextFocus",
         "key": "backspace"
       }
     ],
