@@ -26,6 +26,7 @@ export default class Recorder {
     this._storage = storage;
 
     let subscriptions: vscode.Disposable[] = [];
+
     vscode.workspace.onDidChangeTextDocument(
       this.onDidChangeTextDocument,
       this,
@@ -38,38 +39,80 @@ export default class Recorder {
       subscriptions
     );
 
+    const insertNamedStop = vscode.commands.registerCommand(
+      "hackertyper.insertNamedStop",
+      this.insertNamedStop,
+      this
+    );
+
+    const insertStop = vscode.commands.registerCommand(
+      "hackertyper.insertStop",
+      () => {
+        this.insertStop(null);
+      }
+    );
+
     const save = vscode.commands.registerCommand(
       "hackertyper.saveMacro",
       () => {
-        vscode.window
-          .showInputBox({
-            prompt: "Give this thing a name",
-            placeHolder: "cool-macro"
-          })
-          .then(name => {
-            if (name) {
-              return this._storage
-                .save({
-                  name,
-                  description: "",
-                  buffers: buffers.all()
-                })
-                .then(macro => {
-                  vscode.window.showInformationMessage(
-                    `Saved ${macro.buffers.length} frames under "${
-                      macro.name
-                    }".`
-                  );
-                  save.dispose();
-                });
-            }
-          });
+        this.saveRecording(save);
       }
     );
 
     // Why?
     this._textEditor = vscode.window.activeTextEditor;
-    this._disposable = vscode.Disposable.from(...subscriptions, save);
+    this._disposable = vscode.Disposable.from(
+      ...subscriptions,
+      insertNamedStop,
+      insertStop,
+      save
+    );
+  }
+
+  private insertNamedStop() {
+    vscode.window
+      .showInputBox({
+        prompt: "What do you want to call your stop point?",
+        placeHolder: "Type a name or ENTER for unnamed stop point"
+      })
+      .then(name => {
+        this.insertStop(name || null);
+      });
+  }
+
+  private insertStop(name: string | null) {
+    buffers.insert({
+      stop: {
+        name: name || null
+      },
+      changes: null,
+      selections: null,
+      position: this._buffers++
+    });
+  }
+
+  private saveRecording(command: vscode.Disposable) {
+    vscode.window
+      .showInputBox({
+        prompt: "Give this thing a name",
+        placeHolder: "cool-macro"
+      })
+      .then(name => {
+        if (name) {
+          return this._storage
+            .save({
+              name,
+              description: "",
+              buffers: buffers.all()
+            })
+            .then(macro => {
+              vscode.window.showInformationMessage(
+                `Saved ${macro.buffers.length} buffers under "${macro.name}".`
+              );
+              command.dispose();
+            });
+        }
+      });
   }
 
   private onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent) {

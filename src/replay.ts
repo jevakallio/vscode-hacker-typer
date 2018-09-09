@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import * as buffers from "./buffers";
 import Storage from "./storage";
 import * as Queue from "promise-queue";
+
+const stopPointBreakChar = `\n`; // ENTER
 const replayConcurrency = 1;
 const replayQueueMaxSize = Number.MAX_SAFE_INTEGER;
 const replayQueue = new Queue(replayConcurrency, replayQueueMaxSize);
@@ -31,7 +33,7 @@ export function start(context: vscode.ExtensionContext) {
 
     isEnabled = true;
     vscode.window.showInformationMessage(
-      `Now playing ${buffers.count()} frames from ${macro.name}!`
+      `Now playing ${buffers.count()} buffers from ${macro.name}!`
     );
   });
 }
@@ -45,8 +47,12 @@ export function onType({ text }: { text: string }) {
   if (isEnabled) {
     replayQueue.add(
       () =>
-        new Promise(next => {
-          advanceBuffer(next);
+        new Promise((resolve, reject) => {
+          try {
+            advanceBuffer(resolve, text);
+          } catch (e) {
+            reject(e);
+          }
         })
     );
   } else {
@@ -54,7 +60,7 @@ export function onType({ text }: { text: string }) {
   }
 }
 
-function advanceBuffer(next: () => void) {
+function advanceBuffer(done: () => void, userInput: string) {
   const editor = vscode.window.activeTextEditor;
   const buffer = currentBuffer;
 
@@ -68,7 +74,16 @@ function advanceBuffer(next: () => void) {
     return;
   }
 
-  const { changes, selections } = buffer;
+  if (buffers.isStopPoint(buffer)) {
+    if (userInput === stopPointBreakChar) {
+      currentBuffer = buffers.get(buffer.position + 1);
+    }
+
+    return done();
+  }
+
+  const { changes, selections } = <buffers.Frame>buffer;
+
   const updateSelectionAndAdvanceToNextBuffer = () => {
     if (selections.length) {
       editor.selections = selections;
@@ -80,6 +95,7 @@ function advanceBuffer(next: () => void) {
         vscode.TextEditorRevealType.InCenterIfOutsideViewport
       );
     }
+
     currentBuffer = buffers.get(buffer.position + 1);
 
     // Ran out of buffers? Disable type capture.
@@ -87,7 +103,7 @@ function advanceBuffer(next: () => void) {
       disable();
     }
 
-    next();
+    done();
   };
 
   if (changes.length > 0) {

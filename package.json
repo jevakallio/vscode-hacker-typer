@@ -7,8 +7,12 @@
   "engines": {
     "vscode": "^1.23.0"
   },
-  "categories": ["Other"],
-  "activationEvents": ["*"],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
   "main": "./out/extension",
   "contributes": {
     "commands": [
@@ -23,6 +27,14 @@
       {
         "command": "hackertyper.saveMacro",
         "title": "Save Current Hacker Typer Macro"
+      },
+      {
+        "command": "hackertyper.insertStop",
+        "title": "Insert soft stop point"
+      },
+      {
+        "command": "hackertyper.insertNamedStop",
+        "title": "Insert named stop point"
       },
       {
         "command": "hackertyper.testStuff",

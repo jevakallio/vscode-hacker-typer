@@ -4,11 +4,26 @@ import { rehydrateBuffer } from "./rehydrate";
 
 let buffers: Buffer[] = dummy.map(rehydrateBuffer);
 
-export type Buffer = {
+export type StopPoint = {
+  position: number;
+  stop: {
+    name: string | null;
+  };
+};
+
+export type Frame = {
   changes: vscode.TextDocumentContentChangeEvent[];
   selections: vscode.Selection[];
   position: number;
 };
+
+export type Buffer = StopPoint | Frame;
+
+export function isStopPoint(buffer: Buffer): buffer is StopPoint {
+  return (
+    (<StopPoint>buffer).stop !== undefined && (<StopPoint>buffer).stop !== null
+  );
+}
 
 export function all() {
   return buffers;

@@ -25,21 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
     replay.start(context);
   });
 
-  let test = vscode.commands.registerCommand("hackertyper.testStuff", () => {
-    vscode.window
-      .showInputBox({
-        prompt: "Give this thing a name",
-        placeHolder: "my-awesome-macro"
-      })
-      .then(value => {
-        vscode.window.showInformationMessage(`${value}`);
-        vscode.window
-          .showQuickPick(["One", "Two", "Three"], {})
-          .then(picked => {
-            vscode.window.showInformationMessage(`${picked}`);
-          });
-      });
-  });
+  let test = vscode.commands.registerCommand("hackertyper.testStuff", () => {});
 
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);

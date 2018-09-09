@@ -22,10 +22,21 @@ interface SerializedSelection {
   anchor: SerializedPosition;
 }
 
+export interface SerializedStopPoint {
+  stop: { name: string | null };
+  position: number;
+}
+
 export interface SerializedBuffer {
   changes: SerializedChangeEvent[];
   selections: SerializedSelection[];
   position: number;
+}
+
+export type SerializedBuffer = SerializedBuffer | SerializedStopPoint;
+
+function isStopPoint(buffer: SerializedBuffer): buffer is SerializedStopPoint {
+  return (<SerializedStopPoint>buffer).stop !== undefined;
 }
 
 function rehydratePosition(serialized: SerializedPosition): vscode.Position {
@@ -53,6 +64,15 @@ function rehydrateChangeEvent(
 }
 
 export function rehydrateBuffer(serialized: SerializedBuffer): buffers.Buffer {
+  if (isStopPoint(serialized)) {
+    return {
+      position: serialized.position,
+      stop: {
+        name: serialized.stop.name || null
+      }
+    };
+  }
+
   return {
     position: serialized.position,
     changes: serialized.changes.map(rehydrateChangeEvent),
