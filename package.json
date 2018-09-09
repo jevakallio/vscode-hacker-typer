@@ -2,7 +2,7 @@
   "name": "vscode-hacker-typer",
   "displayName": "VSCode HackerTyper",
   "description": "Hacker Typer extension for looking cool while live coding",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "publisher": "jevakallio",
   "author": {
     "name": "Jani Eväkallio"
@@ -82,7 +82,6 @@
   },
   "devDependencies": {
     "typescript": "^2.6.1",
-    "vscode": "^1.1.6",
     "tslint": "^5.8.0",
     "@types/node": "^7.0.43",
     "@types/mocha": "^2.2.42"
@@ -90,6 +89,7 @@
   "dependencies": {
     "@types/promise-queue": "^2.2.0",
     "promise-queue": "^2.2.5",
+    "vscode": "^1.1.21",
     "vscode-cache": "^0.3.0"
   }
 }
