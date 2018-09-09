@@ -1,6 +1,7 @@
 "use strict";
 
 import * as vscode from "vscode";
+import Storage from "./Storage";
 import Recorder from "./Recorder";
 import * as replay from "./replay";
 
@@ -25,7 +26,21 @@ export function activate(context: vscode.ExtensionContext) {
     replay.start(context);
   });
 
-  let test = vscode.commands.registerCommand("hackertyper.testStuff", () => {});
+  let remove = vscode.commands.registerCommand(
+    "hackertyper.removeMacro",
+    () => {
+      const storage = Storage.getInstance(context);
+      const items = storage.list();
+      vscode.window.showQuickPick(items.map(item => item.name)).then(picked => {
+        if (!picked) {
+          return;
+        }
+
+        storage.remove(picked);
+        vscode.window.showInformationMessage(`Removed "${picked}"`);
+      });
+    }
+  );
 
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);
@@ -35,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
     replay.onBackspace
   );
 
-  context.subscriptions.push(record, play, type, backspace, test);
+  context.subscriptions.push(record, play, type, backspace, remove);
 }
 
 // this method is called when your extension is deactivated

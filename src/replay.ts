@@ -62,8 +62,8 @@ export function onType({ text }: { text: string }) {
 
 export function onBackspace() {
   // move buffer one step backwards
-  if (isEnabled) {
-    currentBuffer = buffers.get(Math.max(0, currentBuffer.position - 1));
+  if (isEnabled && currentBuffer.position > 0) {
+    currentBuffer = buffers.get(currentBuffer.position - 1);
   }
 
   // actually execute backspace action

@@ -11,6 +11,7 @@ declare module "vscode-cache" {
     all(): { [key: string]: T };
     get(key: string): T;
     put(key: string, thing: T): Promise<void>;
+    forget(key: string): Promise<void> | false;
   }
 
   export = Cache;

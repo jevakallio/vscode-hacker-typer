@@ -70,12 +70,18 @@ export default class Storage {
     const { buffers, ...metadata } = macro;
     const operations = [
       this._listings.put(macro.name, metadata),
-      // @TODO this might be the dumbest thing ever
+      // Run JSON serialization on buffers to convert them from
+      // VSCode classes to plain JavaScript objects.
       this._macros.put(macro.name, JSON.parse(JSON.stringify(buffers)))
     ];
 
     return Promise.all(operations).then(() => {
       return macro;
     });
+  }
+
+  public remove(name: string): void {
+    this._listings.forget(name);
+    this._macros.forget(name);
   }
 }

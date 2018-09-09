@@ -39,6 +39,10 @@
         "title": "Insert soft stop point"
       },
       {
+        "command": "hackertyper.removeMacro",
+        "title": "Remove Hacker Typer macros"
+      },
+      {
         "command": "hackertyper.insertNamedStop",
         "title": "Insert named stop point"
       },
