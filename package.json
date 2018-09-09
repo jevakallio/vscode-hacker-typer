@@ -4,8 +4,20 @@
   "description": "Hacker Typer",
   "version": "0.0.1",
   "publisher": "jevakallio",
+  "author": {
+    "name": "Jani Eväkallio"
+  },
   "engines": {
     "vscode": "^1.23.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jevakallio/vscode-hacker-typer"
+  },
+  "icon": "docs/hackertyper-icon.png",
+  "galleryBanner": {
+    "color": "#1D1D1D",
+    "theme": "dark"
   },
   "categories": [
     "Other"
