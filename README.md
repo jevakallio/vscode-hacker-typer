@@ -39,3 +39,7 @@ When you hit a stop point while in replay mode, you need to press `ENTER` to bre
 ## Current limitations
 
 - Only supports single file macros [#11](https://github.com/jevakallio/vscode-hacker-typer/issues/11)
+
+## License
+
+MIT
