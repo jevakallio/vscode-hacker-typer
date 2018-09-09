@@ -16,7 +16,7 @@ export default class Recorder {
       // reset global buffer
       buffers.clear();
 
-      vscode.window.showInformationMessage("Now recording!");
+      vscode.window.showInformationMessage("Hacker Typer is now recording!");
       const recorder = new Recorder(Storage.getInstance(context));
       context.subscriptions.push(recorder);
     };
@@ -142,10 +142,6 @@ export default class Recorder {
       selections,
       position: this._buffers++
     });
-
-    if (buffers.count() % 10 === 0) {
-      vscode.window.showInformationMessage(buffers.count().toString());
-    }
   }
 
   dispose() {

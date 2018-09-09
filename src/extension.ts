@@ -14,8 +14,6 @@ export function activate(context: vscode.ExtensionContext) {
     'Congratulations, your extension "vscode-hacker-typer" is now active!'
   );
 
-  vscode.window.showInformationMessage("HackerTyper activating!");
-
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with  registerCommand
   // The commandId parameter must match the command field in package.json
@@ -56,8 +54,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(record, play, type, backspace, remove);
-
-  vscode.window.showInformationMessage("HackerTyper activation completed!");
 }
 
 // this method is called when your extension is deactivated

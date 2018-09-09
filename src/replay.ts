@@ -19,7 +19,6 @@ export function start(context: vscode.ExtensionContext) {
       return;
     }
 
-    vscode.window.showInformationMessage(`${picked}`);
     const macro = storage.getByName(picked);
     buffers.inject(macro.buffers);
 
