@@ -1,8 +1,6 @@
 import * as vscode from "vscode";
-import dummy from "./test/data";
-import { rehydrateBuffer } from "./rehydrate";
 
-let buffers: Buffer[] = dummy.map(rehydrateBuffer);
+let buffers: Buffer[] = [];
 
 export type StopPoint = {
   position: number;
