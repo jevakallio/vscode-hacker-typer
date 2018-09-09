@@ -25,35 +25,38 @@
     "commands": [
       {
         "command": "hackertyper.recordMacro",
-        "title": "Record Hacker Typer Macro"
+        "title": "Record Macro",
+        "category": "HackerTyper"
       },
       {
         "command": "hackertyper.playMacro",
-        "title": "Play Hacker Typer Macro"
+        "title": "Play Macro",
+        "category": "HackerTyper"
       },
       {
         "command": "hackertyper.saveMacro",
-        "title": "Save Current Hacker Typer Macro"
-      },
-      {
-        "command": "hackertyper.insertStop",
-        "title": "Insert soft stop point"
+        "title": "Save Macro",
+        "category": "HackerTyper"
       },
       {
         "command": "hackertyper.removeMacro",
-        "title": "Remove Hacker Typer macros"
+        "title": "Remove Macro",
+        "category": "HackerTyper"
+      },
+      {
+        "command": "hackertyper.insertStop",
+        "title": "Insert Soft Stop Point",
+        "category": "HackerTyper"
       },
       {
         "command": "hackertyper.insertNamedStop",
-        "title": "Insert named stop point"
-      },
-      {
-        "command": "hackertyper.testStuff",
-        "title": "Test hacker typer stuff"
+        "title": "Insert Named Stop Point",
+        "category": "HackerTyper"
       },
       {
         "command": "hackertyper.backspace",
-        "title": "Erase previous frame"
+        "title": "Erase Previous Frame",
+        "category": "HackerTyper"
       }
     ]
   },
