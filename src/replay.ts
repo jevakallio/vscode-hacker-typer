@@ -29,8 +29,6 @@ export function start(context: vscode.ExtensionContext) {
       return;
     }
 
-    // console.log("All", JSON.stringify(buffers.all()));
-
     isEnabled = true;
     vscode.window.showInformationMessage(
       `Now playing ${buffers.count()} buffers from ${macro.name}!`
