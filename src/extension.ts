@@ -14,20 +14,25 @@ export function activate(context: vscode.ExtensionContext) {
     'Congratulations, your extension "vscode-hacker-typer" is now active!'
   );
 
+  vscode.window.showInformationMessage("HackerTyper activating!");
+
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with  registerCommand
   // The commandId parameter must match the command field in package.json
   let record = vscode.commands.registerCommand(
-    "hackertyper.recordMacro",
+    "jevakallio.vscode-hacker-typer.recordMacro",
     Recorder.register(context)
   );
 
-  let play = vscode.commands.registerCommand("hackertyper.playMacro", () => {
-    replay.start(context);
-  });
+  let play = vscode.commands.registerCommand(
+    "jevakallio.vscode-hacker-typer.playMacro",
+    () => {
+      replay.start(context);
+    }
+  );
 
   let remove = vscode.commands.registerCommand(
-    "hackertyper.removeMacro",
+    "jevakallio.vscode-hacker-typer.removeMacro",
     () => {
       const storage = Storage.getInstance(context);
       const items = storage.list();
@@ -46,11 +51,13 @@ export function activate(context: vscode.ExtensionContext) {
   let type = vscode.commands.registerCommand("type", replay.onType);
 
   let backspace = vscode.commands.registerCommand(
-    "hackertyper.backspace",
+    "jevakallio.vscode-hacker-typer.backspace",
     replay.onBackspace
   );
 
   context.subscriptions.push(record, play, type, backspace, remove);
+
+  vscode.window.showInformationMessage("HackerTyper activation completed!");
 }
 
 // this method is called when your extension is deactivated

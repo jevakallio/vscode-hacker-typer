@@ -2,7 +2,7 @@
   "name": "vscode-hacker-typer",
   "displayName": "VSCode HackerTyper",
   "description": "Hacker Typer extension for looking cool while live coding",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "publisher": "jevakallio",
   "author": {
     "name": "Jani Eväkallio"
@@ -24,50 +24,52 @@
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "onCommand:jevakallio.vscode-hacker-typer.recordMacro",
+    "onCommand:jevakallio.vscode-hacker-typer.playMacro",
+    "onCommand:jevakallio.vscode-hacker-typer.deleteMacro"
   ],
   "main": "./out/extension",
   "contributes": {
     "keybindings": [
       {
-        "command": "hackertyper.backspace",
+        "command": "jevakallio.vscode-hacker-typer.backspace",
         "when": "editorTextFocus",
-        "key": "backspace"
+        "key": "shift+backspace"
       }
     ],
     "commands": [
       {
-        "command": "hackertyper.recordMacro",
+        "command": "jevakallio.vscode-hacker-typer.recordMacro",
         "title": "Record Macro",
         "category": "HackerTyper"
       },
       {
-        "command": "hackertyper.playMacro",
+        "command": "jevakallio.vscode-hacker-typer.playMacro",
         "title": "Play Macro",
         "category": "HackerTyper"
       },
       {
-        "command": "hackertyper.saveMacro",
+        "command": "jevakallio.vscode-hacker-typer.saveMacro",
         "title": "Save Macro",
         "category": "HackerTyper"
       },
       {
-        "command": "hackertyper.removeMacro",
+        "command": "jevakallio.vscode-hacker-typer.removeMacro",
         "title": "Remove Macro",
         "category": "HackerTyper"
       },
       {
-        "command": "hackertyper.insertStop",
+        "command": "jevakallio.vscode-hacker-typer.insertStop",
         "title": "Insert Soft Stop Point",
         "category": "HackerTyper"
       },
       {
-        "command": "hackertyper.insertNamedStop",
+        "command": "jevakallio.vscode-hacker-typer.insertNamedStop",
         "title": "Insert Named Stop Point",
         "category": "HackerTyper"
       },
       {
-        "command": "hackertyper.backspace",
+        "command": "jevakallio.vscode-hacker-typer.backspace",
         "title": "Erase Previous Frame",
         "category": "HackerTyper"
       }
@@ -81,15 +83,15 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/node": "^7.0.43",
+    "@types/mocha": "^2.2.42",
+    "@types/promise-queue": "^2.2.0",
     "typescript": "^2.6.1",
     "tslint": "^5.8.0",
-    "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
+    "vscode": "^1.1.21"
   },
   "dependencies": {
-    "@types/promise-queue": "^2.2.0",
     "promise-queue": "^2.2.5",
-    "vscode": "^1.1.21",
     "vscode-cache": "^0.3.0"
   }
 }

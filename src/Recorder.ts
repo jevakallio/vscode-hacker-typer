@@ -40,20 +40,20 @@ export default class Recorder {
     );
 
     const insertNamedStop = vscode.commands.registerCommand(
-      "hackertyper.insertNamedStop",
+      "jevakallio.vscode-hacker-typer.insertNamedStop",
       this.insertNamedStop,
       this
     );
 
     const insertStop = vscode.commands.registerCommand(
-      "hackertyper.insertStop",
+      "jevakallio.vscode-hacker-typer.insertStop",
       () => {
         this.insertStop(null);
       }
     );
 
     const save = vscode.commands.registerCommand(
-      "hackertyper.saveMacro",
+      "jevakallio.vscode-hacker-typer.saveMacro",
       () => {
         this.saveRecording(save);
       }
