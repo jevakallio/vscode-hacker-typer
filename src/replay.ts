@@ -60,7 +60,7 @@ export function onType({ text }: { text: string }) {
 
 export function onBackspace() {
   // move buffer one step backwards
-  if (isEnabled && currentBuffer.position > 0) {
+  if (isEnabled && currentBuffer && currentBuffer.position > 0) {
     currentBuffer = buffers.get(currentBuffer.position - 1);
   }
 

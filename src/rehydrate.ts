@@ -27,13 +27,13 @@ export interface SerializedStopPoint {
   position: number;
 }
 
-export interface SerializedBuffer {
+export interface SerializedFrame {
   changes: SerializedChangeEvent[];
   selections: SerializedSelection[];
   position: number;
 }
 
-export type SerializedBuffer = SerializedBuffer | SerializedStopPoint;
+export type SerializedBuffer = SerializedFrame | SerializedStopPoint;
 
 function isStopPoint(buffer: SerializedBuffer): buffer is SerializedStopPoint {
   return (<SerializedStopPoint>buffer).stop !== undefined;
