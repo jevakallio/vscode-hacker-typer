@@ -55,16 +55,17 @@ async function setStartingPoint(
 
     editor = await vscode.window.showTextDocument(document);
   } else {
-    await editor.edit(edit => {
+    const existingEditor = editor;
+    await existingEditor.edit(edit => {
       // update initial file content
-      const l = editor.document.lineCount;
+      const l = existingEditor.document.lineCount;
       const range = new vscode.Range(
         new vscode.Position(0, 0),
         new vscode.Position(
           l,
           Math.max(
             0,
-            editor.document.lineAt(Math.max(0, l - 1)).text.length - 1
+            existingEditor.document.lineAt(Math.max(0, l - 1)).text.length - 1
           )
         )
       );
@@ -75,7 +76,7 @@ async function setStartingPoint(
   }
 
   if (editor) {
-    updateSelections(startingPoint.selections, textEditor);
+    updateSelections(startingPoint.selections, editor);
 
     // language should always be defined, guard statement here
     // to support old recorded frames before language bit was added
