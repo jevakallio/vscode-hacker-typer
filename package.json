@@ -34,7 +34,28 @@
       {
         "command": "jevakallio.vscode-hacker-typer.backspace",
         "when": "editorTextFocus",
-        "key": "shift+backspace"
+        "key": "cmd+shift+backspace"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.recordMacro",
+        "when": "editorTextFocus",
+        "key": "cmd+shift+t r"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.playMacro",
+        "key": "cmd+shift+t p"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.saveMacro",
+        "key": "cmd+shift+t s"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.insertStop",
+        "key": "cmd+shift+t i"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.insertNamedStop",
+        "key": "cmd+shift+t n"
       }
     ],
     "commands": [
