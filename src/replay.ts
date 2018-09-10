@@ -29,7 +29,7 @@ export function start(context: vscode.ExtensionContext) {
     }
 
     const textEditor = vscode.window.activeTextEditor;
-    if (buffers.isStartingPoint(currentBuffer) && textEditor) {
+    if (buffers.isStartingPoint(currentBuffer)) {
       setStartingPoint(currentBuffer, textEditor);
     }
 
@@ -40,34 +40,53 @@ export function start(context: vscode.ExtensionContext) {
   });
 }
 
-function setStartingPoint(
+async function setStartingPoint(
   startingPoint: buffers.StartingPoint,
-  textEditor: vscode.TextEditor
+  textEditor: vscode.TextEditor | undefined
 ) {
-  textEditor
-    .edit(edit => {
+  let editor = textEditor;
+  // if no open text editor, open one
+  if (!editor) {
+    vscode.window.showInformationMessage("opening new window");
+    const document = await vscode.workspace.openTextDocument({
+      language: startingPoint.language,
+      content: startingPoint.content
+    });
+
+    editor = await vscode.window.showTextDocument(document);
+  } else {
+    await editor.edit(edit => {
       // update initial file content
-      const l = textEditor.document.lineCount;
+      const l = editor.document.lineCount;
       const range = new vscode.Range(
         new vscode.Position(0, 0),
         new vscode.Position(
           l,
           Math.max(
             0,
-            textEditor.document.lineAt(Math.max(0, l - 1)).text.length - 1
+            editor.document.lineAt(Math.max(0, l - 1)).text.length - 1
           )
         )
       );
 
       edit.delete(range);
       edit.insert(new vscode.Position(0, 0), startingPoint.content);
-    })
-    .then(() => {
-      updateSelections(startingPoint.selections, textEditor);
-
-      // move to next frame
-      currentBuffer = buffers.get(startingPoint.position + 1);
     });
+  }
+
+  if (editor) {
+    updateSelections(startingPoint.selections, textEditor);
+
+    // language should always be defined, guard statement here
+    // to support old recorded frames before language bit was added
+    if (startingPoint.language) {
+      // @TODO set editor language once the API becomes available:
+      // https://github.com/Microsoft/vscode/issues/1800
+    }
+  }
+
+  // move to next frame
+  currentBuffer = buffers.get(startingPoint.position + 1);
 }
 
 export function disable() {
@@ -83,6 +102,7 @@ export function onType({ text }: { text: string }) {
           try {
             advanceBuffer(resolve, text);
           } catch (e) {
+            console.log(e);
             reject(e);
           }
         })
@@ -142,7 +162,7 @@ function advanceBuffer(done: () => void, userInput: string) {
 
   const updateSelectionAndAdvanceToNextBuffer = () => {
     if (selections.length) {
-      updateEditorSelections(selections, editor);
+      updateSelections(selections, editor);
     }
 
     currentBuffer = buffers.get(buffer.position + 1);
@@ -155,7 +175,7 @@ function advanceBuffer(done: () => void, userInput: string) {
     done();
   };
 
-  if (changes.length > 0) {
+  if (changes && changes.length > 0) {
     editor
       .edit(edit => applyContentChanges(changes, edit))
       .then(updateSelectionAndAdvanceToNextBuffer);

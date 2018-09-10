@@ -48,6 +48,8 @@ export function activate(context: vscode.ExtensionContext) {
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);
 
+  // @TODO use registerTextEditorCommand instead?
+  // https://code.visualstudio.com/docs/extensionAPI/vscode-api
   let backspace = vscode.commands.registerCommand(
     "jevakallio.vscode-hacker-typer.backspace",
     replay.onBackspace

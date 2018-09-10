@@ -76,10 +76,12 @@ export default class Recorder {
   private insertStartingPoint(textEditor: vscode.TextEditor) {
     const content = textEditor.document.getText();
     const selections = textEditor.selections;
+    const language = textEditor.document.languageId;
 
     buffers.insert({
       position: this._buffers++,
       content,
+      language,
       selections
     });
   }

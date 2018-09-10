@@ -8,6 +8,7 @@ type WithPosition = {
 
 export type StartingPoint = WithPosition & {
   content: string;
+  language: string;
   selections: vscode.Selection[];
 };
 

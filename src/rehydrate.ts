@@ -24,6 +24,7 @@ interface SerializedSelection {
 
 export interface SerializedStartingPoint {
   content: string;
+  language: string;
   position: number;
   selections: SerializedSelection[];
 }
@@ -90,6 +91,7 @@ export function rehydrateBuffer(serialized: SerializedBuffer): buffers.Buffer {
     return {
       position: serialized.position,
       content: serialized.content,
+      language: serialized.language,
       selections: serialized.selections.map(rehydrateSelection)
     };
   }
