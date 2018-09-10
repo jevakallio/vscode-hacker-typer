@@ -28,11 +28,46 @@ export function start(context: vscode.ExtensionContext) {
       return;
     }
 
+    const textEditor = vscode.window.activeTextEditor;
+    if (buffers.isStartingPoint(currentBuffer) && textEditor) {
+      setStartingPoint(currentBuffer, textEditor);
+    }
+
     isEnabled = true;
     vscode.window.showInformationMessage(
       `Now playing ${buffers.count()} buffers from ${macro.name}!`
     );
   });
+}
+
+function setStartingPoint(
+  startingPoint: buffers.StartingPoint,
+  textEditor: vscode.TextEditor
+) {
+  textEditor
+    .edit(edit => {
+      // update initial file content
+      const l = textEditor.document.lineCount;
+      const range = new vscode.Range(
+        new vscode.Position(0, 0),
+        new vscode.Position(
+          l,
+          Math.max(
+            0,
+            textEditor.document.lineAt(Math.max(0, l - 1)).text.length - 1
+          )
+        )
+      );
+
+      edit.delete(range);
+      edit.insert(new vscode.Position(0, 0), startingPoint.content);
+    })
+    .then(() => {
+      updateSelections(startingPoint.selections, textEditor);
+
+      // move to next frame
+      currentBuffer = buffers.get(startingPoint.position + 1);
+    });
 }
 
 export function disable() {
@@ -67,6 +102,20 @@ export function onBackspace() {
   vscode.commands.executeCommand("deleteLeft");
 }
 
+function updateSelections(
+  selections: vscode.Selection[],
+  editor: vscode.TextEditor
+) {
+  editor.selections = selections;
+
+  // move scroll focus if needed
+  const { start, end } = editor.selections[0];
+  editor.revealRange(
+    new vscode.Range(start, end),
+    vscode.TextEditorRevealType.InCenterIfOutsideViewport
+  );
+}
+
 function advanceBuffer(done: () => void, userInput: string) {
   const editor = vscode.window.activeTextEditor;
   const buffer = currentBuffer;
@@ -93,14 +142,7 @@ function advanceBuffer(done: () => void, userInput: string) {
 
   const updateSelectionAndAdvanceToNextBuffer = () => {
     if (selections.length) {
-      editor.selections = selections;
-
-      // move scroll focus if needed
-      const { start, end } = editor.selections[0];
-      editor.revealRange(
-        new vscode.Range(start, end),
-        vscode.TextEditorRevealType.InCenterIfOutsideViewport
-      );
+      updateEditorSelections(selections, editor);
     }
 
     currentBuffer = buffers.get(buffer.position + 1);

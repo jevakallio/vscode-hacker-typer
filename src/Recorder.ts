@@ -67,6 +67,21 @@ export default class Recorder {
       insertStop,
       save
     );
+
+    if (this._textEditor) {
+      this.insertStartingPoint(this._textEditor);
+    }
+  }
+
+  private insertStartingPoint(textEditor: vscode.TextEditor) {
+    const content = textEditor.document.getText();
+    const selections = textEditor.selections;
+
+    buffers.insert({
+      position: this._buffers++,
+      content,
+      selections
+    });
   }
 
   private insertNamedStop() {

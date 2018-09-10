@@ -2,20 +2,34 @@ import * as vscode from "vscode";
 
 let buffers: Buffer[] = [];
 
-export type StopPoint = {
+type WithPosition = {
   position: number;
+};
+
+export type StartingPoint = WithPosition & {
+  content: string;
+  selections: vscode.Selection[];
+};
+
+export type StopPoint = WithPosition & {
   stop: {
     name: string | null;
   };
 };
 
-export type Frame = {
+export type Frame = WithPosition & {
   changes: vscode.TextDocumentContentChangeEvent[];
   selections: vscode.Selection[];
-  position: number;
 };
 
-export type Buffer = StopPoint | Frame;
+export type Buffer = StartingPoint | StopPoint | Frame;
+
+export function isStartingPoint(buffer: Buffer): buffer is StartingPoint {
+  return (
+    (<StartingPoint>buffer).content !== undefined &&
+    (<StartingPoint>buffer).content !== null
+  );
+}
 
 export function isStopPoint(buffer: Buffer): buffer is StopPoint {
   return (

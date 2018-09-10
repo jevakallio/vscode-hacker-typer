@@ -22,18 +22,31 @@ interface SerializedSelection {
   anchor: SerializedPosition;
 }
 
+export interface SerializedStartingPoint {
+  content: string;
+  position: number;
+  selections: SerializedSelection[];
+}
 export interface SerializedStopPoint {
   stop: { name: string | null };
   position: number;
 }
-
 export interface SerializedFrame {
   changes: SerializedChangeEvent[];
   selections: SerializedSelection[];
   position: number;
 }
 
-export type SerializedBuffer = SerializedFrame | SerializedStopPoint;
+export type SerializedBuffer =
+  | SerializedFrame
+  | SerializedStopPoint
+  | SerializedStartingPoint;
+
+function isStartingPoint(
+  buffer: SerializedBuffer
+): buffer is SerializedStartingPoint {
+  return (<SerializedStartingPoint>buffer).content !== undefined;
+}
 
 function isStopPoint(buffer: SerializedBuffer): buffer is SerializedStopPoint {
   return (<SerializedStopPoint>buffer).stop !== undefined;
@@ -70,6 +83,14 @@ export function rehydrateBuffer(serialized: SerializedBuffer): buffers.Buffer {
       stop: {
         name: serialized.stop.name || null
       }
+    };
+  }
+
+  if (isStartingPoint(serialized)) {
+    return {
+      position: serialized.position,
+      content: serialized.content,
+      selections: serialized.selections.map(rehydrateSelection)
     };
   }
 
