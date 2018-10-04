@@ -2,7 +2,7 @@
   "name": "vscode-hacker-typer",
   "displayName": "VSCode HackerTyper",
   "description": "Hacker Typer extension for looking cool while live coding",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "jevakallio",
   "author": {
     "name": "Jani Eväkallio"
