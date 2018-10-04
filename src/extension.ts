@@ -1,7 +1,7 @@
 "use strict";
 
 import * as vscode from "vscode";
-import Storage from "./Storage";
+import Storage from "./storage";
 import Recorder from "./Recorder";
 import * as replay from "./replay";
 
