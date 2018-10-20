@@ -1,15 +1,21 @@
 # VSCode Hacker Typer
 
-Great for live coding presentations, impressing your friends, or just trying to look busy at work.
+_Great for live coding presentations, impressing your friends, or just trying to look busy at work._
+
+![Promotional video](docs/hackertyper-video.gif)
 
 Hacker Typer allows you to record yourself programming, and to replay the same keystrokes by wildly mashing any key. Supports typing, editing, selections (including multicursor) and autocompletions. Basically, it looks like you have programming superpowers.
+
+**See it live in action: [Writing Code Like a Real Hacker - Reactivate X, London](https://www.youtube.com/watch?v=ulnC-SDBDKE)**
+
+**Download the extension from [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jevakallio.vscode-hacker-typer)**
 
 ## Features
 
 - Record and replay **macros**.
 - Insert stop points, so you don't accidentally overrun your talking point while live coding.
 
-## How to use it
+## How to use Hacker Typer
 
 ### Record a macro
 
@@ -34,13 +40,14 @@ Hacker Typer allows you to record yourself programming, and to replay the same k
 
 ### Stop points
 
-While in recording mode, execute `HackerTyper: Insert Soft Stop Point` command from the command palette. Optionally, you can use the `HackerTyper: Insert Named Stop Point` command to display a small hint in the VSCode status bar when you hit this stop point while replaying (**@TODO**!)
+While in recording mode, execute `HackerTyper: Insert Soft Stop Point` command from the command palette.
 
 When you hit a stop point while in replay mode, you need to press `ENTER` to break out of the stop point. All other keystrokes are ignored until you break out.
 
 ## Current limitations
 
 - Only supports single file macros [#11](https://github.com/jevakallio/vscode-hacker-typer/issues/11)
+- If you make a mistake while recording, you have to start over. User experience could be wildly improved here
 - When starting from existing active editor, the document language is not restored from the macro (see [vscode#1800](https://github.com/Microsoft/vscode/issues/1800))
 
 ## License
