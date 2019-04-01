@@ -45,6 +45,11 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  let exprt = vscode.commands.registerCommand(
+    "jevakallio.vscode-hacker-typer.exportMacro",
+    () => console.log('flag exporting')
+  );
+
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);
 
@@ -55,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
     replay.onBackspace
   );
 
-  context.subscriptions.push(record, play, type, backspace, remove);
+  context.subscriptions.push(record, play, type, backspace, remove, exprt);
 }
 
 // this method is called when your extension is deactivated

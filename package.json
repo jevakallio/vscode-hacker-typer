@@ -26,7 +26,8 @@
   "activationEvents": [
     "onCommand:jevakallio.vscode-hacker-typer.recordMacro",
     "onCommand:jevakallio.vscode-hacker-typer.playMacro",
-    "onCommand:jevakallio.vscode-hacker-typer.deleteMacro"
+    "onCommand:jevakallio.vscode-hacker-typer.deleteMacro",
+    "onCommand:jevakallio.vscode-hacker-typer.exportMacro"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -72,6 +73,11 @@
       {
         "command": "jevakallio.vscode-hacker-typer.saveMacro",
         "title": "Save Macro",
+        "category": "HackerTyper"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.exportMacro",
+        "title": "Export Macro",
         "category": "HackerTyper"
       },
       {
