@@ -4,7 +4,6 @@ import * as vscode from "vscode";
 import Storage from "./storage";
 import Recorder from "./Recorder";
 import * as replay from "./replay";
-import { Uri } from "vscode";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -63,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
           }
         };
 
-        vscode.window.showSaveDialog(options).then((location: Uri | undefined) => {
+        vscode.window.showSaveDialog(options).then((location: vscode.Uri | undefined) => {
           if (location === undefined) { return; }
 
           storage.exprt(picked, location, (err) => {
@@ -80,6 +79,32 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  
+  let imprt = vscode.commands.registerCommand(
+    "jevakallio.vscode-hacker-typer.importMacro",
+    () => {
+      const storage = Storage.getInstance(context);
+
+      const options: vscode.OpenDialogOptions = {
+        canSelectMany: true,
+        openLabel: 'Import',
+        filters: {
+          JSON: ['json']
+        }
+      };
+
+      vscode.window.showOpenDialog(options).then((files: vscode.Uri[] | undefined) => {
+        if (files === undefined) {
+          return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+          storage.imprt(files[i]);
+        }
+      });
+    }
+  );
+
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);
 
@@ -90,7 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
     replay.onBackspace
   );
 
-  context.subscriptions.push(record, play, type, backspace, remove, exprt);
+  context.subscriptions.push(record, play, type, backspace, remove, exprt, imprt);
 }
 
 // this method is called when your extension is deactivated
