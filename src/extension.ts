@@ -4,6 +4,7 @@ import * as vscode from "vscode";
 import Storage from "./storage";
 import Recorder from "./Recorder";
 import * as replay from "./replay";
+import { Uri } from "vscode";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -47,7 +48,36 @@ export function activate(context: vscode.ExtensionContext) {
 
   let exprt = vscode.commands.registerCommand(
     "jevakallio.vscode-hacker-typer.exportMacro",
-    () => console.log('flag exporting')
+    () => {
+      const storage = Storage.getInstance(context);
+      const items = storage.list();
+      vscode.window.showQuickPick(items.map(item => item.name)).then(picked => {
+        if (!picked) {
+          return;
+        }
+
+        const options: vscode.SaveDialogOptions = {
+          saveLabel: 'Export',
+          filters: {
+            JSON: ['json']
+          }
+        };
+
+        vscode.window.showSaveDialog(options).then((location: Uri | undefined) => {
+          if (location === undefined) { return; }
+
+          storage.exprt(picked, location, (err) => {
+            if (err) {
+              vscode.window.showErrorMessage(`Error exporting ${picked}`);
+              return;
+            }
+
+            vscode.window.showInformationMessage(`Exported "${picked}"`);
+          });
+        });
+
+      });
+    }
   );
 
   // @TODO dispose

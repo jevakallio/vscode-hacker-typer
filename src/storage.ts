@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as Cache from "vscode-cache";
 import { Buffer } from "./buffers";
 import { SerializedBuffer, rehydrateBuffer } from "./rehydrate";
+import * as fs from 'fs';
 
 const LISTINGS = "HackerTyper:Listings";
 const MACROS = "HackerTyper:Macros";
@@ -83,5 +84,11 @@ export default class Storage {
   public remove(name: string): void {
     this._listings.forget(name);
     this._macros.forget(name);
+  }
+
+  public exprt(name: string, path: vscode.Uri, callback: (err: NodeJS.ErrnoException) => void): void {
+    const content = JSON.stringify(this._macros.get(name));
+
+    return fs.writeFile(path.fsPath, content, callback);
   }
 }
