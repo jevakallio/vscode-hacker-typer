@@ -45,6 +45,75 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  let exprt = vscode.commands.registerCommand(
+    "jevakallio.vscode-hacker-typer.exportMacro",
+    () => {
+      const storage = Storage.getInstance(context);
+      const items = storage.list();
+      vscode.window.showQuickPick(items.map(item => item.name)).then(picked => {
+        if (!picked) {
+          return;
+        }
+
+        const options: vscode.SaveDialogOptions = {
+          saveLabel: 'Export',
+          filters: {
+            JSON: ['json']
+          }
+        };
+
+        vscode.window.showSaveDialog(options).then((location: vscode.Uri | undefined) => {
+          if (location === undefined) { return; }
+
+          storage.exprt(picked, location, (err) => {
+            if (err) {
+              vscode.window.showErrorMessage(`Error exporting ${picked}`);
+              console.log(err);
+              return;
+            }
+
+            vscode.window.showInformationMessage(`Exported "${picked}"`);
+          });
+        });
+
+      });
+    }
+  );
+
+  
+  let imprt = vscode.commands.registerCommand(
+    "jevakallio.vscode-hacker-typer.importMacro",
+    () => {
+      const storage = Storage.getInstance(context);
+
+      const options: vscode.OpenDialogOptions = {
+        canSelectMany: true,
+        openLabel: 'Import',
+        filters: {
+          JSON: ['json']
+        }
+      };
+
+      vscode.window.showOpenDialog(options).then((files: vscode.Uri[] | undefined) => {
+        if (files === undefined) {
+          return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+          storage.imprt(files[i], (err) => {
+            if (err) {
+              vscode.window.showErrorMessage(`Error importing ${files[i].fsPath}`);
+              console.log(err);
+              return;
+            }
+
+            vscode.window.showInformationMessage(`Imported "${files[i].fsPath}"`);
+          });
+        }
+      });
+    }
+  );
+
   // @TODO dispose
   let type = vscode.commands.registerCommand("type", replay.onType);
 
@@ -55,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
     replay.onBackspace
   );
 
-  context.subscriptions.push(record, play, type, backspace, remove);
+  context.subscriptions.push(record, play, type, backspace, remove, exprt, imprt);
 }
 
 // this method is called when your extension is deactivated
