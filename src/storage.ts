@@ -93,14 +93,13 @@ export default class Storage {
     return fs.writeFile(path.fsPath, content, callback);
   }
 
-  public imprt(uri: vscode.Uri): void {
+  public imprt(uri: vscode.Uri, callback: (err: NodeJS.ErrnoException | undefined) => void): void {
     const listings = this._listings;
     const macros = this._macros;
     fs.readFile(uri.fsPath, (err: NodeJS.ErrnoException, data: Buffer): void => {
 
       if (err) {
-        console.log(err);
-        return;
+        callback(err);
       }
 
       const json = JSON.parse(data.toString());
@@ -110,7 +109,9 @@ export default class Storage {
         macros.put(name, json)
       ];
   
-      Promise.all(operations);
+      Promise.all(operations)
+        .then(() => callback(undefined))
+        .catch(callback);
     });
   }
 }

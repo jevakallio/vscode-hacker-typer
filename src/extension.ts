@@ -68,6 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
           storage.exprt(picked, location, (err) => {
             if (err) {
               vscode.window.showErrorMessage(`Error exporting ${picked}`);
+              console.log(err);
               return;
             }
 
@@ -99,7 +100,15 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         for (let i = 0; i < files.length; i++) {
-          storage.imprt(files[i]);
+          storage.imprt(files[i], (err) => {
+            if (err) {
+              vscode.window.showErrorMessage(`Error importing ${files[i].fsPath}`);
+              console.log(err);
+              return;
+            }
+
+            vscode.window.showInformationMessage(`Imported "${files[i].fsPath}"`);
+          });
         }
       });
     }
