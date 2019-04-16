@@ -56,6 +56,10 @@
       {
         "command": "jevakallio.vscode-hacker-typer.insertNamedStop",
         "key": "cmd+shift+t n"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.exitMacro",
+        "key": "cmd+shift+t e"
       }
     ],
     "commands": [
@@ -93,6 +97,11 @@
         "command": "jevakallio.vscode-hacker-typer.backspace",
         "title": "Erase Previous Frame",
         "category": "HackerTyper"
+      },
+      {
+        "command": "jevakallio.vscode-hacker-typer.exitMacro",
+        "title": "Exit Macro",
+        "category": "HackerTyper"
       }
     ]
   },
@@ -105,7 +114,7 @@
   },
   "devDependencies": {
     "typescript": "^2.6.1",
-    "vscode": "^1.1.21",
+    "vscode": "1.1.33",
     "tslint": "^5.8.0",
     "@types/node": "^8.10.25",
     "@types/mocha": "^2.2.42",

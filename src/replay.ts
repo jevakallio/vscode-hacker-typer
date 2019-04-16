@@ -95,6 +95,13 @@ export function disable() {
   currentBuffer = undefined;
 }
 
+export function stopMacro() {
+  isEnabled = false;
+  vscode.window.showInformationMessage(
+    `Macro is stopped`
+  );
+}
+
 export function onType({ text }: { text: string }) {
   if (isEnabled) {
     replayQueue.add(
