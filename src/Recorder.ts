@@ -126,6 +126,7 @@ export default class Recorder {
               vscode.window.showInformationMessage(
                 `Saved ${macro.buffers.length} buffers under "${macro.name}".`
               );
+              this.dispose();
               command.dispose();
             });
         }
